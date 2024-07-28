@@ -1,4 +1,5 @@
 import os
+import uuid
 from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
 from googletrans import Translator
@@ -24,7 +25,7 @@ url_pattern = re.compile(r'https?://\S+|www\.\S+')
 
 # Инициализация моделей Vosk
 model_ru = Model(r"C:\Users\Pc2\Desktop\translator_bot\vosk-model-small-ru-0.22")
-model_en = Model(r"C:\Users\Pc2\Desktop\translator_bot\vosk-model-small-en-us-0.15")
+model_en = Model(r"C:\Users\Pc2\Desktop\translator_bot\vosk-model-en-us-0.22-lgraph")
 
 def detect_language(text):
     if re.search(r'[а-яА-Я]', text):
@@ -97,8 +98,8 @@ async def handle_message(message: types.Message):
         file = await bot.get_file(file_id)
         file_path = file.file_path
 
-        # Скачивание голосового файла
-        local_oga_path = 'voice.oga'
+        # Создание уникального имени для временного файла
+        local_oga_path = f'voice_{uuid.uuid4().hex}.oga'
         await bot.download_file(file_path, local_oga_path)
 
         # Распознавание речи
